@@ -3,6 +3,7 @@
 import click
 from commands.run import run
 from commands.c import c
+from commands.p import p
 
 @click.group()
 def cli():
@@ -10,6 +11,7 @@ def cli():
     pass
 
 cli.add_command(run)
+cli.add_command(p)
 cli.add_command(c)
 
 if __name__ == '__main__':
