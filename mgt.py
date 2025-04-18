@@ -6,8 +6,7 @@ from commands.c import c
 
 @click.group()
 def cli():
-    
-    """Minha CLI personalizada"""
+    """MyGit-CLI"""
     pass
 
 cli.add_command(run)

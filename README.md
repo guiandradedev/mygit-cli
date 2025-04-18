@@ -28,25 +28,27 @@ Install the required Python libraries using the provided `requirements.txt` file
 pip install -r requirements.txt
 ```
 
-### 3. Install Globally (Optional)
+### 3. Apply Alias
 
-If you want to use the `mgt` command globally, move the Python script to a directory in your PATH:
+This set of commands works only on macOS/Linux:
 
 ```bash
-mv mgt.py ~/.local/bin/mgt
-chmod +x ~/.local/bin/mgt
+vim ~/.zshrc  # or ~/.bashrc
 ```
 
-Add `~/.local/bin` to your PATH if it's not already included. You can do this by adding the following line to your `~/.bashrc` or `~/.zshrc` file:
-
+Add the following line:
 ```bash
-export PATH="$HOME/.local/bin:$PATH"
+alias mgt="python3 /path/to/mygitcli/mgt.py"
 ```
 
-Then, source your shell configuration:
-
+Save and apply the changes:
 ```bash
-source ~/.bashrc   # or source ~/.zshrc
+source ~/.zshrc  # or ~/.bashrc
+```
+
+Now you can enjoy the app:
+```bash
+mgt c -t feat -m "commit by alias"
 ```
 
 ## How to Use

@@ -28,44 +28,44 @@ COMMIT_TYPES = {
     "move": "🚚",         # mover/renomear arquivos
     "rename": "✏️",      # renomear arquivos
 }
-
 @click.command()
-@click.option('--type', '-t', help='Tipo do commit (ex: feat, fix, chore, etc)')
-@click.option('--message', '-m', help='Mensagem do commit')
-@click.option('--dry', is_flag=True, help='Somente exibe o comando sem executar')
-@click.option('--content', '-c', multiple=True, help="Conteúdo que vai pro commit")
+@click.option('--type', '-t', help='Type of commit (e.g., feat, fix, chore, etc)')
+@click.option('--message', '-m', help='Commit message')
+@click.option('--dry', is_flag=True, help='Only display the command without executing it')
+@click.option('--content', '-c', multiple=True, help="Content to include in the commit")
 def c(type, message, dry, content):
+    """Commit into your GitHub"""
     if not type:
         options = [f"{emoji} {tipo}" for tipo, emoji in COMMIT_TYPES.items()]
         answer = inquirer.prompt([
-            inquirer.List("commit_type", message="Escolha o tipo de commit", choices=options)
+            inquirer.List("commit_type", message="Choose the type of commit", choices=options)
         ])
         if answer:
-            type = answer["commit_type"].split()[1]  # pegando "tipo" no final
+            type = answer["commit_type"].split()[1]  # extracting "type" at the end
         else:
-            click.echo("❌ Nenhuma opção selecionada.")
+            click.echo("❌ No option selected.")
             return
 
     if type not in COMMIT_TYPES:
-        click.echo(f"❌ Tipo '{type}' inválido. Use um dos seguintes: {', '.join(COMMIT_TYPES.keys())}")
+        click.echo(f"❌ Invalid type '{type}'. Use one of the following: {', '.join(COMMIT_TYPES.keys())}")
         return
 
     if not message:
-        message = input("📝 Insira a mensagem de commit: ")
+        message = input("📝 Enter the commit message: ")
 
     emoji = COMMIT_TYPES[type]
     full_message = f'{emoji} {type}: {message}'
 
-    # Adicionando arquivos
+    # Adding files
     cmd_add = ["git", "add", *content] if content else None
     if not cmd_add:
         confirm = inquirer.prompt([
-            inquirer.Confirm('add_all', message='Nenhum conteúdo especificado. Adicionar tudo com "git add ."?', default=False)
+            inquirer.Confirm('add_all', message='No content specified. Add everything with "git add ."?', default=False)
         ])
         if confirm and confirm["add_all"]:
             cmd_add = ["git", "add", "."]
         else:
-            click.echo("❌ Nenhum arquivo adicionado. Commit cancelado.")
+            click.echo("❌ No files added. Commit canceled.")
             return
 
     cmd_commit = ["git", "commit", "-m", full_message]
@@ -78,11 +78,11 @@ def c(type, message, dry, content):
         try:
             subprocess.run(cmd_add, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             result = subprocess.run(cmd_commit, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            click.echo("✅ Commit realizado com sucesso:")
+            click.echo("✅ Commit successfully made:")
             click.echo(full_message)
             click.echo(result.stdout)
         except subprocess.CalledProcessError as e:
-            click.echo(f"❌ Erro ao executar git: {e.stderr}")
+            click.echo(f"❌ Error executing git: {e.stderr}")
 
 if __name__ == "__main__":
     c()
