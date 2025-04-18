@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
+
 import click
-from comandos.run import run
-from comandos.c import c
+from commands.run import run
+from commands.c import c
 
 @click.group()
 def cli():
+    
     """Minha CLI personalizada"""
     pass
 
